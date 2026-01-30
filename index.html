@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yang Pernah Nyata - Novel Refleksif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b4b5c;
+            --secondary-color: #a8b2c1;
+            --accent-color: #d4a574;
+            --text-color: #2c3e50;
+            --light-bg: #f9f7f4;
+            --dark-bg: #1e293b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .book-shadow {
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chapter-card {
+            transition: all 0.3s ease;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            z-index: 100;
+            transition: width 0.2s;
+        }
+        
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+        }
+        
+        .dark-mode {
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #334155;
+        }
+        
+        .dark-mode .text-gray-700 {
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .text-gray-600 {
+            color: #cbd5e1;
+        }
+        
+        .dark-mode .border-gray-200 {
+            border-color: #475569;
+        }
+        
+        .dark-mode .hover\:bg-gray-50:hover {
+            background-color: #475569;
+        }
+        
+        .page-transition {
+            animation: pageTransition 0.5s ease-in-out;
+        }
+        
+        @keyframes pageTransition {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .bookmark-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .bookmark-btn:hover {
+            color: var(--accent-color);
+        }
+        
+        .bookmark-btn.bookmarked {
+            color: var(--accent-color);
+        }
+        
+        .reflection-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+            backdrop-filter: blur(10px);
+        }
+        
+        .dark-mode .reflection-card {
+            background: linear-gradient(135deg, rgba(51,65,85,0.9), rgba(51,65,85,0.7));
+        }
+    </style>
+</head>
+<body class="min-h-screen transition-colors duration-300">
+    <div class="reading-progress" id="readingProgress"></div>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-40 transition-colors duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="serif-title text-2xl font-bold gradient-text">Yang pernah Nyata</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#beranda" class="hover:text-blue-600 transition">Beranda</a>
+                <a href="#sinopsis" class="hover:text-blue-600 transition">Sinopsis</a>
+                <a href="#baca" class="hover:text-blue-600 transition">Baca Novel</a>
+                <a href="#tentang" class="hover:text-blue-600 transition">Tentang Novel Reflektif</a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-2">
+                <a href="#beranda" class="py-2 hover:text-blue-600 transition">Beranda</a>
+                <a href="#sinopsis" class="py-2 hover:text-blue-600 transition">Sinopsis</a>
+                <a href="#baca" class="py-2 hover:text-blue-600 transition">Baca Novel</a>
+                <a href="#tentang" class="py-2 hover:text-blue-600 transition">Tentang Novel Reflektif</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="beranda" class="relative py-20 px-4 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-70"></div>
+        <div class="container mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 fade-in">
+                    <h1 class="serif-title text-4xl md:text-5xl font-bold mb-6 gradient-text">Yang pernah Nyata</h1>
+                    <p class="text-lg mb-6 text-gray-700">Novel refleksif tentang cinta yang tumbuh perlahan, diuji oleh waktu, dan bertahan meski tak selalu saling menggenggam.</p>
+                    <div class="flex flex-wrap gap-4 mb-8">
+                        <button onclick="scrollToSection('baca')" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                            <i class="fas fa-book-open mr-2"></i> Mulai Membaca
+                        </button>
+                        <button onclick="scrollToSection('sinopsis')" class="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition">
+                            <i class="fas fa-info-circle mr-2"></i> Sinopsis
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-600">
+                        <span><i class="fas fa-user-pen mr-1"></i> Alza Dzulhaq</span>
+                        <span><i class="fas fa-calendar mr-1"></i> 2026</span>
+                        <span><i class="fas fa-bookmark mr-1"></i> Reflektif</span>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center fade-in">
+                    <div class="relative">
+                        <div class="book-shadow w-64 h-96 bg-gradient-to-br from-indigo-100 to-blue-200 rounded-lg overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <div class="h-full flex flex-col justify-center items-center p-8 text-center">
+                                <h2 class="serif-title text-3xl font-bold mb-4 text-indigo-800">Yang pernah Nyata</h2>
+                                <p class="text-indigo-700 mb-6">Kisah tentang cinta yang nyata</p>
+                                <div class="w-16 h-1 bg-indigo-600 mb-6"></div>
+                                <p class="text-indigo-600 italic">"Bukan karena ingin dikenang kisah ini ditulis, melainkan agar apa yang pernah nyata tidak diingkari oleh waktu."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sinopsis Section -->
+    <section id="sinopsis" class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="serif-title text-3xl font-bold text-center mb-12 gradient-text">Sinopsis</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gradient-to-r from-indigo-50 to-blue-50 p-8 rounded-lg shadow-md">
+                    <p class="text-justify text-gray-700 mb-6 leading-relaxed">
+                        Novel ini bukan tentang cinta yang sempurna, melainkan tentang cinta yang nyata—yang tumbuh perlahan, diuji oleh waktu, dan bertahan meski tak selalu saling menggenggam.
+                    </p>
+                    <p class="text-justify text-gray-700 mb-6 leading-relaxed">
+                        Alza Kaelan dan Zoya Adelia menjalani hubungan yang tidak dibangun dari kebisingan. Mereka belajar mencintai dalam jarak, menunggu tanpa kepastian, dan tetap setia meski sunyi menjadi teman paling setia. Kisah ini lahir dari hari-hari yang benar-benar dijalani, bukan dari imajinasi kosong. Ia tidak menawarkan akhir yang manis, melainkan kejujuran tentang cinta yang belum selesai.
+                    </p>
+                    <p class="text-justify text-gray-700 leading-relaxed">
+                        Ini adalah kisah tentang dua insan yang pernah menjadi rumah bagi satu sama lain, namun terpaksa belajar tinggal di ruang yang berbeda. Sebuah novel tentang ketulusan, kesabaran, dan cinta yang tidak pernah ingin dipamerkan.
+                    </p>
+                </div>
+                
+                <div class="mt-12 grid md:grid-cols-2 gap-8">
+                    <div class="reflection-card p-6 rounded-lg shadow-md">
+                        <h3 class="serif-title text-xl font-bold mb-4 text-indigo-800">Prolog</h3>
+                        <p class="text-justify text-gray-700 italic">
+                            "Bukan karena ingin dikenang kisah ini ditulis, melainkan agar apa yang pernah nyata tidak diingkari oleh waktu."
+                        </p>
+                    </div>
+                    <div class="reflection-card p-6 rounded-lg shadow-md">
+                        <h3 class="serif-title text-xl font-bold mb-4 text-indigo-800">Epilog</h3>
+                        <p class="text-justify text-gray-700 italic">
+                            "Jika suatu hari kisah ini berhenti di sini, bukan berarti cinta mereka kalah. Mungkin ia hanya memilih bentuk lain untuk bertahan."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Reading Section -->
+    <section id="baca" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="serif-title text-3xl font-bold text-center mb-12 gradient-text">Baca Novel</h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold">Daftar Bab</h3>
+                        <div class="flex items-center space-x-2">
+                            <button id="fontSizeDecrease" class="p-2 rounded hover:bg-gray-100 transition">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span id="fontSizeDisplay" class="px-2">Aa</span>
+                            <button id="fontSizeIncrease" class="p-2 rounded hover:bg-gray-100 transition">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                        <button onclick="loadChapter('prolog')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Prolog</h4>
+                            <p class="text-sm text-gray-600">Agar yang nyata tidak diingkari waktu</p>
+                        </button>
+                        <button onclick="loadChapter('bab1')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab I</h4>
+                            <p class="text-sm text-gray-600">Awal Yang Pelan</p>
+                        </button>
+                        <button onclick="loadChapter('bab2')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab II</h4>
+                            <p class="text-sm text-gray-600">Belajar Dekat</p>
+                        </button>
+                        <button onclick="loadChapter('bab3')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab III</h4>
+                            <p class="text-sm text-gray-600">Jarak</p>
+                        </button>
+                        <button onclick="loadChapter('bab4')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab IV</h4>
+                            <p class="text-sm text-gray-600">Kita Yang Pernah Nyata</p>
+                        </button>
+                        <button onclick="loadChapter('bab5')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab V</h4>
+                            <p class="text-sm text-gray-600">Sunyi</p>
+                        </button>
+                        <button onclick="loadChapter('bab6')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab VI</h4>
+                            <p class="text-sm text-gray-600">Bertahan</p>
+                        </button>
+                        <button onclick="loadChapter('bab7')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab VII</h4>
+                            <p class="text-sm text-gray-600">Zoya</p>
+                        </button>
+                        <button onclick="loadChapter('bab8')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab VIII</h4>
+                            <p class="text-sm text-gray-600">Antara Jarak Dan Doa</p>
+                        </button>
+                        <button onclick="loadChapter('bab9')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab IX</h4>
+                            <p class="text-sm text-gray-600">Yang Tak Terucap</p>
+                        </button>
+                        <button onclick="loadChapter('bab10')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab X</h4>
+                            <p class="text-sm text-gray-600">Malam Panjang</p>
+                        </button>
+                        <button onclick="loadChapter('bab11')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab XI</h4>
+                            <p class="text-sm text-gray-600">Waktu</p>
+                        </button>
+                        <button onclick="loadChapter('bab12')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab XII</h4>
+                            <p class="text-sm text-gray-600">Pertanyaan</p>
+                        </button>
+                        <button onclick="loadChapter('bab13')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab XIII</h4>
+                            <p class="text-sm text-gray-600">Diam</p>
+                        </button>
+                        <button onclick="loadChapter('bab14')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab XIV</h4>
+                            <p class="text-sm text-gray-600">Kita Sekarang</p>
+                        </button>
+                        <button onclick="loadChapter('bab15')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Bab XV</h4>
+                            <p class="text-sm text-gray-600">Belum Selesai</p>
+                        </button>
+                        <button onclick="loadChapter('epilog')" class="chapter-card p-4 bg-gray-50 rounded-lg text-left hover:bg-gray-100 transition">
+                            <h4 class="font-semibold">Epilog</h4>
+                            <p class="text-sm text-gray-600">Bentuk lain untuk bertahan</p>
+                        </button>
+                    </div>
+                    
+                    <!-- Reading Area -->
+                    <div id="readingArea" class="hidden">
+                        <div class="flex justify-between items-center mb-6 pb-4 border-b">
+                            <h3 id="chapterTitle" class="text-xl font-semibold"></h3>
+                            <div class="flex space-x-2">
+                                <button id="bookmarkBtn" class="bookmark-btn p-2 rounded hover:bg-gray-100 transition">
+                                    <i class="far fa-bookmark"></i>
+                                </button>
+                                <button onclick="closeChapter()" class="p-2 rounded hover:bg-gray-100 transition">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="chapterContent" class="prose max-w-none text-justify leading-relaxed mb-8"></div>
+                        
+                        <div class="flex justify-between">
+                            <button id="prevChapter" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                                <i class="fas fa-chevron-left mr-2"></i> Sebelumnya
+                            </button>
+                            <button id="nextChapter" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                                Selanjutnya <i class="fas fa-chevron-right ml-2"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Reflection Section -->
+                        <div class="mt-12 p-6 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg">
+                            <h4 class="serif-title text-lg font-bold mb-4 text-indigo-800">Refleksi Pembaca</h4>
+                            <p class="text-gray-700 mb-4">Apa yang Anda rasakan setelah membaca bab ini? Bagikan pemikiran Anda:</p>
+                            <textarea class="w-full p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="Tulis refleksi Anda di sini..."></textarea>
+                            <button class="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                                <i class="fas fa-paper-plane mr-2"></i> Kirim Refleksi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Reflective Novel Section -->
+    <section id="tentang" class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="serif-title text-3xl font-bold text-center mb-12 gradient-text">Tentang Novel Reflektif</h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-6 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg">
+                        <h3 class="serif-title text-xl font-bold mb-4 text-indigo-800">Apa itu Novel Reflektif?</h3>
+                        <p class="text-justify text-gray-700 mb-4">
+                            Novel reflektif adalah jenis novel yang memfokuskan pada perenungan, introspeksi, dan refleksi karakter terhadap pengalaman hidup mereka. Novel ini cenderung memiliki narasi yang lebih dalam dan puitis, dengan fokus pada perasaan dan pemikiran internal karakter.
+                        </p>
+                        <p class="text-justify text-gray-700">
+                            "Belum Selesai" adalah contoh novel reflektif yang mengeksplorasi kedalaman emosi Alza dalam menghadapi cinta yang jauh dari kesempurnaan, namun penuh dengan kejujuran dan ketulusan.
+                        </p>
+                    </div>
+                    
+                    <div class="p-6 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg">
+                        <h3 class="serif-title text-xl font-bold mb-4 text-indigo-800">Ciri-ciri Novel Reflektif</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 mr-2"></i>
+                                <span>Narasi yang lebih dalam dan puitis</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 mr-2"></i>
+                                <span>Fokus pada perasaan dan pemikiran internal karakter</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 mr-2"></i>
+                                <span>Tema yang menggugah pikiran tentang kehidupan, cinta, dan makna</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 mr-2"></i>
+                                <span>Alur yang mungkin tidak linier, melainkan mengikuti alur pemikiran karakter</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-indigo-600 mt-1 mr-2"></i>
+                                <span>Ending yang mungkin terbuka atau tidak konvensional</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-12 p-8 bg-gradient-to-r from-indigo-100 to-blue-100 rounded-lg">
+                    <h3 class="serif-title text-2xl font-bold mb-4 text-center text-indigo-800">Mengapa Membaca Novel Reflektif?</h3>
+                    <p class="text-justify text-gray-700 mb-4">
+                        Membaca novel reflektif seperti "Belum Selesai" memberikan kesempatan bagi pembaca untuk merenungkan kehidupan mereka sendiri. Novel ini tidak hanya menawarkan hiburan, tetapi juga introspeksi tentang makna cinta, kesabaran, dan ketulusan dalam hubungan yang mungkin tidak sempurna.
+                    </p>
+                    <p class="text-justify text-gray-700">
+                        Melalui perjalanan Alza dan Zoya, pembaca diajak untuk memahami bahwa cinta sejati tidak selalu tentang kebersamaan fisik, melainkan tentang kesetiaan dalam ketidakhadiran dan kekuatan untuk bertahan meski dalam sunyi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-4 bg-gray-800 text-white">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="serif-title text-xl font-bold mb-2">Yang pernah Nyata</h3>
+                    <p class="text-gray-400">Novel Refleksif tentang Cinta yang Nyata</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://www.facebook.com/alzaalizanah" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/Dzulhaq-76" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=alzaprogramit@gmail.com" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-goodreads"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>&copy; 2026 Yang pernah Nyata. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle p-3 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <!-- Chapter Data -->
+    <script>
+        // Chapter content data
+        const chapters = {
+            'prolog': {
+                title: 'Prolog',
+                content: `
+                    <p>Bukan karena ingin dikenang kisah ini ditulis, melainkan agar apa yang pernah nyata tidak diingkari oleh waktu.</p>
+                    <p>Alza Kaelan tidak pernah menganggap kisahnya dengan Zoya Adelia sebagai cerita yang bisa ditukar dengan imajinasi. Semua yang ia rasakan lahir dari hari-hari yang benar-benar dijalani—menunggu tanpa kepastian, mencintai tanpa keramaian, dan bertahan tanpa perlu dilihat siapa pun. Ia belajar bahwa cinta tidak selalu hadir dalam bentuk kebersamaan yang utuh. Kadang, cinta justru hidup dalam jarak yang panjang dan diam yang melelahkan.</p>
+                    <p>Zoya adalah nama yang sering hadir dalam doanya, bukan sebagai tuntutan, melainkan sebagai pengingat bahwa ia pernah mencintai dengan sepenuh hati. Kisah ini ditulis bukan untuk membuktikan bahwa cinta selalu indah, melainkan bahwa ia mampu setia meski sunyi, dan tetap bermakna meski tak selalu saling menggenggam.</p>
+                `
+            },
+            'bab1': {
+                title: 'BAB I — AWAL YANG PELAN',
+                content: `
+                    <p>Pertemuan mereka tidak pernah direncanakan untuk menjadi awal dari sebuah kisah panjang. Alza Kaelan mengenal Zoya Adelia dalam keadaan yang biasa saja—tanpa bunga, tanpa janji, tanpa keyakinan bahwa pertemuan itu kelak akan mengubah cara ia memandang waktu dan rindu. Mereka berbincang tentang hal-hal kecil, tentang hari yang melelahkan, tentang mimpi yang belum sepenuhnya dipahami.</p>
+                    <p>Alza bukan tipe lelaki yang mudah terbuka. Ia lebih sering menyimpan perasaannya dalam diam, membiarkan waktu yang berbicara. Zoya berbeda. Ia hangat, tenang, dan tidak pernah memaksa. Kehadirannya seperti senja—tidak menyilaukan, namun selalu ditunggu. Dari situlah kedekatan mereka tumbuh, tanpa disadari, tanpa disepakati.</p>
+                    <p>Hari-hari berlalu dengan ritme yang sama. Pesan singkat, perhatian kecil, dan rasa nyaman yang semakin dalam. Tidak ada kata cinta yang diucapkan, namun keduanya tahu bahwa sesuatu sedang tumbuh di antara mereka. Sesuatu yang pelan, namun nyata.</p>
+                `
+            },
+            'bab2': {
+                title: 'BAB II — BELAJAR DEKAT',
+                content: `
+                    <p>Mendekat bukan berarti memiliki. Alza mempelajari itu bersama Zoya. Mereka berbagi cerita tanpa merasa harus saling mengikat. Zoya menjadi tempat Alza pulang setelah hari yang panjang, meski hanya lewat kata-kata. Alza menjadi pendengar setia bagi Zoya, meski tak selalu tahu harus memberi jawaban seperti apa.</p>
+                    <p>Ada kebahagiaan sederhana dalam kedekatan itu. Tidak mewah, tidak berlebihan. Hanya dua orang yang saling hadir dengan caranya masing-masing. Alza sering bertanya dalam diam: apakah ini cinta? Namun ia tidak pernah berani menjawabnya. Ia takut jika kata itu justru merusak ketenangan yang ada.</p>
+                    <p>Zoya tidak pernah menuntut lebih. Ia memahami batas-batas Alza, dan di situlah Alza merasa dihargai. Mereka belajar bahwa cinta tidak selalu harus dinyatakan dengan suara keras. Kadang, ia cukup dirasakan.</p>
+                `
+            },
+            'bab3': {
+                title: 'BAB III — JARAK',
+                content: `
+                    <p>Jarak datang seperti ujian yang tak bisa ditawar. Kota yang berbeda, kesibukan yang kian menyita waktu, dan jadwal yang tak lagi sejalan. Alza dan Zoya berusaha bertahan. Mereka mencoba menjaga komunikasi, meski sering kali rindu harus dipendam.</p>
+                    <p>Alza belajar bahwa menunggu bukan hal yang mudah. Ada malam-malam panjang yang diisi dengan doa, ada pesan yang tak kunjung terbalas. Namun ia tetap bertahan. Bukan karena janji, melainkan karena keyakinan bahwa apa yang mereka miliki layak diperjuangkan.</p>
+                    <p>Zoya pun berjuang dengan caranya sendiri. Ia tidak pernah mengeluh, namun diamnya sering kali menyimpan lelah. Jarak mengajarkan mereka bahwa cinta tidak selalu tentang kebersamaan fisik, melainkan tentang kesetiaan dalam ketidakhadiran.</p>
+                `
+            },
+            'bab4': {
+                title: 'BAB IV — KITA YANG PERNAH NYATA',
+                content: `
+                    <p>Mereka pernah benar-benar bersama. Ada waktu di mana jarak terasa dekat, di mana tawa menjadi bagian dari hari-hari mereka. Alza menyadari bahwa Zoya bukan sekadar seseorang yang ia cintai, melainkan rumah yang ia temukan di tengah dunia yang melelahkan.</p>
+                    <p>Kebersamaan itu tidak berlangsung lama, namun cukup untuk meninggalkan jejak yang dalam. Mereka berbagi mimpi, berbagi ketakutan, dan berbagi diam. Semua itu menjadi bukti bahwa cinta mereka pernah nyata.</p>
+                `
+            },
+            'bab5': {
+                title: 'BAB V — SUNYI',
+                content: `
+                    <p>Sunyi tidak selalu berarti pergi. Kadang ia hanya hadir terlalu lama. Alza merasakan itu ketika komunikasi mulai menipis. Pesan-pesan yang dulu hangat kini terasa formal. Rindu yang dulu dibagi kini hanya disimpan.</p>
+                    <p>Ia tidak menyalahkan Zoya. Ia tahu, hidup tidak selalu memberi ruang untuk cinta. Namun sunyi itu tetap terasa berat. Alza bertanya-tanya, apakah ini awal dari akhir, atau hanya fase yang harus dilewati.</p>
+                `
+            },
+            'bab6': {
+                title: 'BAB VI — BERTAHAN',
+                content: `
+                    <p>Bertahan adalah pilihan yang sunyi. Alza memilih itu tanpa banyak bicara. Ia tetap menyebut nama Zoya dalam doanya, tetap menyimpan harapan meski tak tahu harus menaruhnya di mana.</p>
+                    <p>Ia belajar bahwa cinta tidak selalu membutuhkan pengakuan. Kadang, ia hanya perlu dijaga.</p>
+                `
+            },
+            'bab7': {
+                title: 'BAB VII — ZOYA',
+                content: `
+                    <p>Zoya Adelia adalah sosok yang kuat dalam diam. Ia tidak pernah meminta Alza untuk menunggu, namun kehadirannya selalu menjadi alasan Alza untuk tetap tinggal. Zoya mencintai dengan cara yang lembut, tanpa tuntutan.</p>
+                    <p>Ia pun berjuang dengan kebimbangannya sendiri. Antara ingin bertahan dan takut melukai. Antara berharap dan mencoba ikhlas.</p>
+                `
+            },
+            'bab8': {
+                title: 'BAB VIII — ANTARA JARAK DAN DOA',
+                content: `
+                    <p>Ketika jarak tak bisa dipendekkan, Alza memilih berdoa. Ia percaya bahwa jika cinta ini memang nyata, ia akan menemukan jalannya sendiri. Doa menjadi penghubung yang paling jujur.</p>
+                `
+            },
+            'bab9': {
+                title: 'BAB IX — YANG TAK TERUCAP',
+                content: `
+                    <p>Banyak hal tidak pernah mereka ucapkan. Bukan karena tidak ingin, melainkan karena takut merusak yang tersisa. Diam menjadi bahasa yang paling sering mereka gunakan.</p>
+                `
+            },
+            'bab10': {
+                title: 'BAB X — MALAM PANJANG',
+                content: `
+                    <p>Malam menjadi saksi betapa rindu bisa begitu ramai di kepala, namun tetap sunyi di kenyataan. Alza sering terjaga, memikirkan Zoya, dan bertanya apakah ia juga merasakan hal yang sama.</p>
+                `
+            },
+            'bab11': {
+                title: 'BAB XI — WAKTU',
+                content: `
+                    <p>Waktu tidak pernah memihak, tapi juga tidak sepenuhnya kejam. Ia hanya menguji siapa yang benar-benar bertahan. Alza dan Zoya berada di persimpangan yang tidak mudah.</p>
+                `
+            },
+            'bab12': {
+                title: 'BAB XII — PERTANYAAN',
+                content: `
+                    <p>Apakah cinta harus selalu berakhir dengan bersama? Atau cukup dengan pernah menjadi nyata? Pertanyaan itu terus menghantui Alza.</p>
+                `
+            },
+            'bab13': {
+                title: 'BAB XIII — DIAM',
+                content: `
+                    <p>Diam mereka bukan tanda menyerah. Ia adalah cara untuk bertahan tanpa melukai.</p>
+                `
+            },
+            'bab14': {
+                title: 'BAB XIV — KITA SEKARANG',
+                content: `
+                    <p>Mereka masih ada, meski tak lagi sama. Masih saling menyimpan, meski tak lagi sering menyapa. Alza menerima bahwa cinta bisa berubah bentuk.</p>
+                `
+            },
+            'bab15': {
+                title: 'BAB XV — BELUM SELESAI',
+                content: `
+                    <p>Alza Kaelan tahu satu hal: kisah ini belum selesai. Entah akan berakhir bersama, atau berakhir sebagai doa yang terus hidup.</p>
+                `
+            },
+            'epilog': {
+                title: 'EPILOG',
+                content: `
+                    <p>Jika suatu hari kisah ini berhenti di sini, bukan berarti cinta mereka kalah. Mungkin ia hanya memilih bentuk lain untuk bertahan.</p>
+                    <p>Alza masih menyebut nama Zoya dalam diam. Tidak untuk memanggil, tidak untuk menuntut. Hanya untuk memastikan bahwa apa yang pernah nyata tidak pernah ia ingkari.</p>
+                    <p>Dan di suatu tempat, Zoya Adelia mungkin masih menyimpan nama Alza Kaelan—sebagai kisah yang belum diberi titik.</p>
+                `
+            }
+        };
+        
+        // Current chapter tracking
+        let currentChapter = null;
+        const chapterOrder = ['prolog', 'bab1', 'bab2', 'bab3', 'bab4', 'bab5', 'bab6', 'bab7', 'bab8', 'bab9', 'bab10', 'bab11', 'bab12', 'bab13', 'bab14', 'bab15', 'epilog'];
+        let bookmarkedChapters = JSON.parse(localStorage.getItem('bookmarkedChapters')) || [];
+        
+        // Load chapter function
+        function loadChapter(chapterId) {
+            if (!chapters[chapterId]) return;
+            
+            currentChapter = chapterId;
+            const chapter = chapters[chapterId];
+            
+            // Update UI
+            document.getElementById('chapterTitle').textContent = chapter.title;
+            document.getElementById('chapterContent').innerHTML = chapter.content;
+            
+            // Show reading area
+            document.getElementById('readingArea').classList.remove('hidden');
+            document.getElementById('readingArea').classList.add('page-transition');
+            
+            // Update bookmark button
+            updateBookmarkButton();
+            
+            // Update navigation buttons
+            updateNavigationButtons();
+            
+            // Scroll to reading area
+            document.getElementById('readingArea').scrollIntoView({ behavior: 'smooth' });
+            
+            // Update reading progress
+            updateReadingProgress();
+        }
+        
+        // Close chapter function
+        function closeChapter() {
+            document.getElementById('readingArea').classList.add('hidden');
+            currentChapter = null;
+        }
+        
+        // Update navigation buttons
+        function updateNavigationButtons() {
+            const currentIndex = chapterOrder.indexOf(currentChapter);
+            const prevBtn = document.getElementById('prevChapter');
+            const nextBtn = document.getElementById('nextChapter');
+            
+            // Previous button
+            if (currentIndex > 0) {
+                prevBtn.disabled = false;
+                prevBtn.onclick = () => loadChapter(chapterOrder[currentIndex - 1]);
+            } else {
+                prevBtn.disabled = true;
+            }
+            
+            // Next button
+            if (currentIndex < chapterOrder.length - 1) {
+                nextBtn.disabled = false;
+                nextBtn.onclick = () => loadChapter(chapterOrder[currentIndex + 1]);
+            } else {
+                nextBtn.disabled = true;
+            }
+        }
+        
+        // Update bookmark button
+        function updateBookmarkButton() {
+            const bookmarkBtn = document.getElementById('bookmarkBtn');
+            const icon = bookmarkBtn.querySelector('i');
+            
+            if (bookmarkedChapters.includes(currentChapter)) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                bookmarkBtn.classList.add('bookmarked');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                bookmarkBtn.classList.remove('bookmarked');
+            }
+        }
+        
+        // Toggle bookmark
+        document.getElementById('bookmarkBtn').addEventListener('click', function() {
+            if (!currentChapter) return;
+            
+            const index = bookmarkedChapters.indexOf(currentChapter);
+            if (index > -1) {
+                bookmarkedChapters.splice(index, 1);
+            } else {
+                bookmarkedChapters.push(currentChapter);
+            }
+            
+            localStorage.setItem('bookmarkedChapters', JSON.stringify(bookmarkedChapters));
+            updateBookmarkButton();
+        });
+        
+        // Update reading progress
+        function updateReadingProgress() {
+            const progressBar = document.getElementById('readingProgress');
+            if (!currentChapter) {
+                progressBar.style.width = '0%';
+                return;
+            }
+            
+            const currentIndex = chapterOrder.indexOf(currentChapter);
+            const progress = ((currentIndex + 1) / chapterOrder.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Font size controls
+        let fontSize = 16; // Default font size in pixels
+        const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+        const chapterContent = document.getElementById('chapterContent');
+        
+        document.getElementById('fontSizeIncrease').addEventListener('click', function() {
+            if (fontSize < 20) {
+                fontSize += 1;
+                updateFontSize();
+            }
+        });
+        
+        document.getElementById('fontSizeDecrease').addEventListener('click', function() {
+            if (fontSize > 14) {
+                fontSize -= 1;
+                updateFontSize();
+            }
+        });
+        
+        function updateFontSize() {
+            chapterContent.style.fontSize = `${fontSize}px`;
+            
+            // Update display
+            if (fontSize <= 14) {
+                fontSizeDisplay.textContent = 'Aa';
+                fontSizeDisplay.style.fontSize = '14px';
+            } else if (fontSize <= 16) {
+                fontSizeDisplay.textContent = 'Aa';
+                fontSizeDisplay.style.fontSize = '16px';
+            } else if (fontSize <= 18) {
+                fontSizeDisplay.textContent = 'Aa';
+                fontSizeDisplay.style.fontSize = '18px';
+            } else {
+                fontSizeDisplay.textContent = 'Aa';
+                fontSizeDisplay.style.fontSize = '20px';
+            }
+        }
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+        
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Smooth scroll to section
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Update reading progress on scroll
+        window.addEventListener('scroll', function() {
+            if (!currentChapter) return;
+            
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            
+            const progressBar = document.getElementById('readingProgress');
+            const currentIndex = chapterOrder.indexOf(currentChapter);
+            const baseProgress = (currentIndex / chapterOrder.length) * 100;
+            const chapterProgress = (100 / chapterOrder.length) * (scrolled / 100);
+            
+            progressBar.style.width = `${baseProgress + chapterProgress}%`;
+        });
+    </script>
+</body>
+</html>
